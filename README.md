@@ -1,22 +1,21 @@
-# DC1 - Debian AD DC Setup
-Scripts and configuration files needed to set up an Active Directory Domain Controller on Debian.
+# Kubuntu - Active Directory Member Server Setup
+Scripts and configuration files needed to set up a member server in an Active Directory Domain.
 
 Reference links:
 
-* https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller
-* https://wiki.samba.org/index.php/Idmap_config_ad
-* https://wiki.samba.org/index.php/Setting_up_a_Share_Using_Windows_ACLs
-* https://www.tecmint.com/manage-samba4-ad-from-windows-via-rsat/
+* ToDo
 
 Create a machine in VirtualBox:
 
-* Name: DB1
+* Name: Kubuntu
 * Type: Linux
-* Version: Debian (64-bit)
-* CPUs: 1
-* RAM: 1024 MB
-* Virtual HD: 8.00 GB
+* Version: Ubuntu (64-bit)
+* CPUs: 2
+* RAM: 4096 MB
+* Video Memory: 64 MB
+* Virtual HD: 50.00 GB
 * HD Type: VDI, dynamically allocated
+* Set "Devices | Shared Clipboard" to Bidirectional
 
 Use these Network settings for all machines in VirtualBox:
 
@@ -27,35 +26,41 @@ Use these Network settings for all machines in VirtualBox:
   * Attached to: Host-only Adapter
   * Name: VirtualBox Host-Only Ethernet Adapter (192.168.56.0/24 – DHCP & IPv6 disabled)
 
-Download the Debian netinstall image. Boot from it to begin the installation.
+Download the Kubuntu image. Boot from it to begin the installation.
 
-* Manually set the enp0s3 network interface:
-  * address 10.0.2.5/24
-  * gateway 10.0.2.1
-  * nameserver 8.8.8.8
-* Hostname: DC1
-* Domain name: samdom.example.com
-* Leave the root password blank.
+* Hostname: Kubuntu
 * Enter the desired user name and password for the admin (sudo) account.
 * Make your disk partition selections and write changes to disk.
-* Software selection: Only “SSH server” and “standard system utilities”.
+* Software selection: standard desktop.
 * Install the GRUB boot loader on /dev/sda
 * Finish the installation and reboot.
 
 Login as the admin user and switch to root.
-Install git and download these instructions, scripts and configuration files:
+Install upgrades:
 ```
 apt update
-apt install git
-git clone https://github.com/TedMichalik/DC1.git
+apt full-upgrade
+reboot
+```
+Login as the admin user and mount Guest Additions (Devices | Insert Guest Additions CD image).
+Install the Linux Guest Additions
+```
+sudo apt install build-essential linux-headers-$(uname -r) -y
+sudo <path to Guest Additions>/VBoxLinuxAdditions.run
+reboot
+```
+Login as the admin user and switch to root.
+Clone git repository to download these instructions, scripts and configuration files:
+```
+git clone https://github.com/TedMichalik/Kubuntu.git
 ```
 ## Install software and copy config files to their proper location:
 ```
-DC1/CopyFiles
+Kubuntu/CopyFiles
 ```
 Add a line to set a system-wide default UMASK in **/etc/pam.d/common-session** (Done with CopyFiles):
 ```
-session optional pam_umask.so umask=002
+session optional pam_umask.so umask=002 #<-- Needed???
 ```
 Install Samba and packages needed for an AD DC. Use the FQDN (DC1.samdom.example.com) for the servers in the Kerberos setup (Done with CopyFiles).
 ```
