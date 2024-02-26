@@ -134,7 +134,7 @@ klist
 ```
 Join the Domain, and Restart Samba
 ```
-samba-tool domain join tjm.tedmichalik.com MEMBER -U administrator
+samba-tool domain join samdom.example.com MEMBER -U administrator
 systemctl start smbd nmbd winbind
 ```
 Enable "Create home directory on login"
