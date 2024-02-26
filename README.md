@@ -29,6 +29,7 @@ Use these Network settings for all machines in VirtualBox:
 Download the Kubuntu image. Boot from it to begin the installation.
 
 * Hostname: Kubuntu
+* Domain: samdom.example.com  <--If not entered, set FQDN in /etc/hosts
 * Enter the desired user name and password for the admin (sudo) account.
 * Make your disk partition selections and write changes to disk.
 * Software selection: standard desktop.
@@ -149,7 +150,7 @@ chmod 0440 /etc/sudoers.d/SAMDOM
 Create the Public folder:
 ```
 mkdir /opt/Public
-chgrp “Domain Users” /opt/Public
+chgrp 'Domain Users' /opt/Public
 chmod 2775 /opt/Public
 ```
 Reboot to make sure everything works:
@@ -157,7 +158,7 @@ Reboot to make sure everything works:
 reboot
 ```
 ## Test the Member Server
-Verify the Public share is present:
+Verify the Public share is present (it will fail the first time):
 ```
 smbclient -L localhost -U%
 ```
@@ -179,7 +180,6 @@ getent group
 ```
 Verify the domain ownership on a test file:
 ```
-touch /tmp/testfile
-chown ted:"Domain Admins" /tmp/testfile
-ls -l /tmp/testfile
+touch /opt/Public/testfile
+ls -l /opt/Public/
 ```
