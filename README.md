@@ -22,7 +22,7 @@ Use these Network settings for all machines in VirtualBox:
 * Adapter 1: Enabled
   * Attached to: NAT Network
   * Name: NatNetwork  (10.0.2.0/24 – DHCP & IPv6 disabled)
-* Adapter 2: Enabled
+* Adapter 2: Disabled  <-- Only needed for machines without a desktop.
   * Attached to: Host-only Adapter
   * Name: VirtualBox Host-Only Ethernet Adapter (192.168.56.0/24 – DHCP & IPv6 disabled)
 
@@ -73,7 +73,7 @@ apt install -y samba winbind libpam-winbind libnss-winbind libpam-krb5 krb5-conf
 ```
 Also install some utility programs (Done with CopyFiles):
 ```
-apt install -y net-tools wsdd
+apt install -y net-tools wsdd $(check-language-support)
 ```
 Stop samba services, backup configuration file and create a new one (Done with CopyFiles):
 ```
