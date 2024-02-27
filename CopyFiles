@@ -28,5 +28,5 @@ cp /root/Kubuntu/config/krb5.conf /etc/
 # sudo for Domain Admins
 cp /root/Kubuntu/config/SAMDOM /etc/sudoers.d/
 
-# Static IP for VirtualBox network interface
-cp /root/DC1/config/VirtualBox /etc/network/interfaces.d/
+# Static IP for VirtualBox network interface  <-- Disabled
+#cp /root/DC1/config/VirtualBox /etc/network/interfaces.d/
