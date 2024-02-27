@@ -3,7 +3,7 @@ Scripts and configuration files needed to set up a member server in an Active Di
 
 Reference links:
 
-* ToDo
+* https://wiki.samba.org/index.php/Setting_up_Samba_as_a_Domain_Member
 
 Create a machine in VirtualBox:
 
@@ -36,23 +36,23 @@ Download the Kubuntu image. Boot from it to begin the installation.
 * Install the GRUB boot loader on /dev/sda
 * Finish the installation and reboot.
 
-Login as the admin user and switch to root.
-Install upgrades:
+Login as the admin user and install upgrades:
 ```
-apt update
-apt full-upgrade
-reboot
+sudo apt update
+sudo apt full-upgrade
+sudo reboot
 ```
 Login as the admin user and mount Guest Additions (Devices | Insert Guest Additions CD image).
 Install the Linux Guest Additions
 ```
 sudo apt install build-essential linux-headers-$(uname -r) -y
 sudo <path to Guest Additions>/VBoxLinuxAdditions.run
-reboot
+sudo reboot
 ```
 Login as the admin user and switch to root.
 Clone git repository to download these instructions, scripts and configuration files:
 ```
+sudo su -
 git clone https://github.com/TedMichalik/Kubuntu.git
 ```
 ## Install software and copy config files to their proper location:
@@ -128,6 +128,11 @@ Edit the Kerberos configuration file**/etc/krb5.conf**. It just needs these line
     dns_lookup_realm = false
     dns_lookup_kdc = true
 ```
+Give sudo access to members of “domain admins” (Done with CopyFiles):
+```
+echo "%domain\ admins ALL=(ALL) ALL" > /etc/sudoers.d/SAMDOM
+chmod 0440 /etc/sudoers.d/SAMDOM
+```
 Test Kerberos authentication against an AD administrative account and list the ticket by issuing the commands:
 ```
 kinit administrator
@@ -142,11 +147,6 @@ Enable "Create home directory on login"
 ```
 pam-auth-update
 ```
-Give sudo access to members of “domain admins” (Done with CopyFiles):
-```
-echo "%domain\ admins ALL=(ALL) ALL" > /etc/sudoers.d/SAMDOM
-chmod 0440 /etc/sudoers.d/SAMDOM
-```
 Create the Public folder:
 ```
 mkdir /opt/Public
@@ -158,7 +158,7 @@ Reboot to make sure everything works:
 reboot
 ```
 ## Test the Member Server
-Verify the Public share is present (it will fail the first time):
+Login as the admin user. Verify the Public share is present (it will fail the first time):
 ```
 smbclient -L localhost -U%
 ```
@@ -177,6 +177,13 @@ Verify the domain groups are shown by both commands:
 ```
 wbinfo -g
 getent group
+```
+Logout the admin user. You should now be able to login a domain user.
+
+Verify that a home directory was created and that umask is 002:
+```
+pwd
+umask
 ```
 Verify the domain ownership on a test file:
 ```
