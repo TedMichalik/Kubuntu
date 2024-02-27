@@ -59,9 +59,9 @@ git clone https://github.com/TedMichalik/Kubuntu.git
 ```
 Kubuntu/CopyFiles
 ```
-Add a line to set a system-wide default UMASK in **/etc/pam.d/common-session** (Done with CopyFiles):
+Change the default UMASK in the /etc/login.defs file (Done with CopyFiles):
 ```
-session optional pam_umask.so umask=002 #<-- Needed???
+UMASK 002
 ```
 Sync time with the AD DC by adding this line to the /etc/systemd/timesyncd.conf file:
 ```
