@@ -18,40 +18,15 @@ apt install -y net-tools wsdd $(check-language-support)
 systemctl stop smbd nmbd winbind
 mv /etc/samba/smb.conf /etc/samba/smb.conf.orig
 
-# Edit the Samba configuration file:
-sed -i '/rfc2307/r /root/DC1/config/smb.insert' /etc/samba/smb.conf
+# Copy the Samba configuration file:
+cp /root/Kubuntu/config/smb.conf /etc/samba/
 
-# Use the Samba created Kerberos configuration file for your DC, enable the correct Samba services:
-cp /var/lib/samba/private/krb5.conf /etc/
-systemctl unmask samba-ad-dc
-systemctl start samba-ad-dc
-systemctl enable samba-ad-dc
-
-# Copy script to cron.hourly that sets RFC2307 attributes in the SAMBA AD DC
-cp /root/DC1/RFC2307 /etc/cron.hourly/
-/etc/cron.hourly/RFC2307
-
-# Fix permissions for the domain on sysvol
-chown 10500:10512 -R /var/lib/samba/sysvol/samdom.example.com/
-
-# DNS name resolving
-sed -i -nr '/dns-nameservers/!p;$a\\tdns-nameservers 10.0.2.5' /etc/network/interfaces
-
-# Chrony Time Service
-mv /etc/chrony/chrony.conf /etc/chrony/chrony.conf.orig
-cp /root/DC1/config/chrony.conf /etc/chrony/
-mkdir /var/lib/samba/ntp_signd
-chown root:_chrony /var/lib/samba/ntp_signd/
-chmod 750 /var/lib/samba/ntp_signd/
+# Backup and copy the Kerberos configuration file:
+mv /etc/krb5.conf /etc/skrb5.conf.orig
+cp /root/Kubuntu/config/krb5.conf /etc/
 
 # sudo for Domain Admins
-cp /root/DC1/config/SAMDOM /etc/sudoers.d/
-
-# DHCP Service
-mv /etc/default/isc-dhcp-server /etc/default/isc-dhcp-server.orig
-cp /root/DC1/config/isc-dhcp-server /etc/default/
-mv /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.orig
-cp /root/DC1/config/dhcpd.conf /etc/dhcp/
+cp /root/Kubuntu/config/SAMDOM /etc/sudoers.d/
 
 # Static IP for VirtualBox network interface
 cp /root/DC1/config/VirtualBox /etc/network/interfaces.d/
