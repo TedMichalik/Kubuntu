@@ -29,7 +29,7 @@ Use these Network settings for all machines in VirtualBox:
 Download the Kubuntu image. Boot from it to begin the installation.
 
 * Hostname: Kubuntu
-* Domain: samdom.example.com  <--If not entered, set FQDN in /etc/hosts
+* Domain: samdom.example.com  <--If not asked for this, add FQDN in /etc/hosts before hostname.
 * Enter the desired user name and password for the admin (sudo) account.
 * Make your disk partition selections and write changes to disk.
 * Software selection: standard desktop.
@@ -150,7 +150,7 @@ pam-auth-update
 Create the Public folder:
 ```
 mkdir /opt/Public
-chgrp 'Domain Users' /opt/Public
+chgrp 'Domain Users' /opt/Public  ##If errors, check for "winbind" at end of passwd and group in /etc/nsswitch
 chmod 2775 /opt/Public
 ```
 Reboot to make sure everything works:
