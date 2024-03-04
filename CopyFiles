@@ -1,5 +1,5 @@
 #!/bin/bash
-# CopyFiles - Script to install Samba AD DC and copy configuration files to their proper location.
+# CopyFiles - Script to install Samba member server and copy configuration files to their proper location.
 #		(Fist save originals as *.orig)
 
 # Default UMASK
